@@ -1,4 +1,5 @@
 import org.hamcrest.Matchers;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 
 import org.junit.jupiter.api.*;
@@ -60,16 +61,23 @@ public class TaxAdviserTests {
     }
 
     public static Stream<Arguments> source() {
-        return Stream.of(Arguments.of(100, 200, 0),
-                Arguments.of(600, 500, 15),
+        return Stream.of(Arguments.of(600, 500, 15),
                 Arguments.of(15200, 9500, 855));
     }
 
     @Test
-    public void testAction() {
+    public void testTaxResult() {
         int earnings = 1000, spendings = 200;
-        String result = TaxAdviser.taxAdviser(earnings, spendings).toString();
+        String result = TaxAdviser.taxAdviser(earnings, spendings);
         String expected = "УСН доходы";
         assertThat(result, Matchers.containsString(expected));
+    }
+
+    @Test
+    public void economyAmount() {
+        int earnings = 2900, spendings = 1350;
+        int result = TaxAdviser.taxEarningsMinusSpendings(earnings,
+                spendings);
+        assertThat(result, Matchers.greaterThan(0));
     }
 }
